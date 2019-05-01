@@ -45,8 +45,8 @@ public class PoseEstimatedEvent extends Event<PoseEstimatedEvent> {
 
     private WritableMap createEvent() {
         WritableMap event = Arguments.createMap();
-        event.putString("type", "heatmap");
-        event.putArray("heatmap", mData);
+        event.putString("type", "limbPositions");
+        event.putArray("limbPositions", mData);
         event.putInt("target", getViewTag());
         return event;
     }

@@ -1,22 +1,16 @@
 package org.reactnative.camera.tasks;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
-import com.google.android.gms.vision.Frame;
 
 import org.reactnative.camera.PoseEstimatorModule;
-import org.reactnative.camera.PoseHeatmap;
-import org.reactnative.frame.RNFrame;
-import org.reactnative.frame.RNFrameFactory;
+import org.reactnative.camera.LimbPositions;
 
 import static org.reactnative.camera.utils.ImageFormatConverter.convertYUV420_NV21toRGB8888;
 
-public class PoseEstimatorAsyncTask extends android.os.AsyncTask<Void, Void, PoseHeatmap> {
+public class PoseEstimatorAsyncTask extends android.os.AsyncTask<Void, Void, LimbPositions> {
     private PoseEstimatorModule mPoseEstimator;
     private PoseEstimatorAsyncTaskDelegate mDelegate;
     //private Bitmap mbitmap;
@@ -42,7 +36,7 @@ public class PoseEstimatorAsyncTask extends android.os.AsyncTask<Void, Void, Pos
     }
 
     @Override
-    protected PoseHeatmap doInBackground(Void... ignored) {
+    protected LimbPositions doInBackground(Void... ignored) {
         if (isCancelled() || mDelegate == null || mPoseEstimator == null) {
             return null;
         }
@@ -52,20 +46,23 @@ public class PoseEstimatorAsyncTask extends android.os.AsyncTask<Void, Void, Pos
         Bitmap bmp = Bitmap.createBitmap(bytesInRGB, mWidth, mHeight, Bitmap.Config.ARGB_8888);
 
         mPoseEstimator.run(bmp);
-        return new PoseHeatmap(mPoseEstimator.Output);
+        if(mPoseEstimator.Output == null){
+            return null;
+        }
+        return new LimbPositions(mPoseEstimator.Output);
     }
 
     @Override
-    protected void onPostExecute(PoseHeatmap poseHeatmap) {
-        super.onPostExecute(poseHeatmap);
+    protected void onPostExecute(LimbPositions limbPositions) {
+        super.onPostExecute(limbPositions);
 
-        if (poseHeatmap != null) {
-            mDelegate.onPoseEstimated(serializeEventData(poseHeatmap));
+        if (limbPositions != null) {
+            mDelegate.onPoseEstimated(serializeEventData(limbPositions));
         }
         mDelegate.onPoseEstimatorTaskCompleted();
     }
 
-    private WritableArray serializeEventData(PoseHeatmap poseHeatmap) {
-        return Arguments.makeNativeArray(poseHeatmap.getHeatmap());
+    private WritableArray serializeEventData(LimbPositions limbPositions) {
+        return Arguments.makeNativeArray(limbPositions.getLimbPositions());
     }
 }

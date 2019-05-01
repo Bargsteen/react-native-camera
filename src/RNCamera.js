@@ -159,7 +159,7 @@ type PropsType = typeof View.props & {
   autoFocusPointOfInterest?: { x: number, y: number },
   faceDetectionClassifications?: number,
   onFacesDetected?: ({ faces: Array<TrackedFaceFeature> }) => void,
-  onPoseEstimated?: ({ heatmap: Array<number> }) => void,
+  onPoseEstimated?: ({ limbPositions: Array<number> }) => void,
   onTextRecognized?: ({ textBlocks: Array<TrackedTextFeature> }) => void,
   captureAudio?: boolean,
   useCamera2Api?: boolean,
