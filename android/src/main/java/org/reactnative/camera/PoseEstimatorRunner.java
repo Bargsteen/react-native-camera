@@ -104,6 +104,9 @@ public class PoseEstimatorRunner {
             return;
         }
         Bitmap bitmap = textureView.getBitmap(poseEstimator.getImageSizeX(), poseEstimator.getImageSizeY());
+
+        if(bitmap == null){ return; }
+
         poseEstimator.classifyFrame(bitmap);
         sendPoseEstimatedEvent(new BodyPoints(poseEstimator.getHeatmap()));
         bitmap.recycle();
