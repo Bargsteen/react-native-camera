@@ -49,7 +49,7 @@ import Vision
         if let observations = request.results as? [VNCoreMLFeatureValueObservation],
             let heatmap = observations.first?.featureValue.multiArrayValue {
 
-            // convert heatmap to Array<Array<Double>>
+            // convert heatmap to [[Int]]
             let bodyPoints = heatmap.convertHeatmapToBodyPoints()
 
             DispatchQueue.main.sync {

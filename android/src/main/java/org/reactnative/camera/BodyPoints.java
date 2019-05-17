@@ -33,8 +33,9 @@ public class BodyPoints {
                     //If this value is the best so far, we save it
                     if (gaussianValue > max) {
                         max = gaussianValue;
-                        arr[bodypart][0] = row;
-                        arr[bodypart][1] = col;
+                        // Flipped "back" on purpose, as the model flips the output
+                        arr[bodypart][0] = col;
+                        arr[bodypart][1] = row;
                     }
                 }
             }
@@ -51,9 +52,7 @@ public class BodyPoints {
                 int currentCol = col + j;
 
                 float value = heatmap[currentRow][currentCol][bodypart];
-                float weight = GAUSSIAN_WEIGHT;
-                if (i == 0 && j == 0)
-                    weight = 1;
+                float weight = i == 0 && j == 0 ? 1 : GAUSSIAN_WEIGHT;
                 sum += value * weight;
             }
         }
