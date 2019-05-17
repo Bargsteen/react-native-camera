@@ -26,6 +26,10 @@ public class BodyPoints {
             //Resetting max for each bodypart
             float max =  0;
 
+            // Default values bodypoint-not-found. iOS does the same.
+            arr[bodypart][0] = -1;
+            arr[bodypart][1] = -1;
+
             //First and last rows and columns are ignored to avoid issues when blurring
             for (int row= 1; row < ROW_COUNT - 1; ++row) {
                 for (int col = 1; col < COL_COUNT - 1; ++col) {
